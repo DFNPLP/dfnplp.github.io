@@ -1,0 +1,311 @@
+<html>
+	<head>
+		<style>
+			body {
+				font-family: "Helvetica Neue", Helvetica, sans-serif;
+			}
+			  
+			.singleColumnGridSectionHeader {
+				color: white;
+				background-color: blue;
+				outline: 1px solid #000;
+			}
+			
+			.cellLikeOutline {
+				outline: 1px solid #000;
+			}
+			
+			.centeredTextColumn {
+				text-align: center;
+			}
+			
+			.rightJustifiedTextColumn {
+				text-align: right;
+			}
+			  
+			.mediumRisk {
+				background-color: yellow;
+			}
+			  
+			.highRisk {
+				background-color: red;
+				color: white;
+			}
+
+			.fillIn {
+				border: 0;
+				border-bottom: 1px solid #000;
+			}
+			
+			.gridForm {
+				display: grid;
+				grid-template-columns: repeat(1, auto);
+				width: 60%;
+			}
+			
+			.gridFormContent {
+				display: grid;
+				grid-template-columns: repeat(1, auto);
+				grid-gap: 3px;
+				padding: 3px 3px 3px 3px;
+			}
+			
+			.fourColumnGridRow {
+				display: grid;
+				grid-template-columns: 3% auto 3% 3%;
+				grid-gap: 3px;
+			}
+			
+			.highlightOnHover:hover {
+				background-color: AntiqueWhite;
+			}
+
+			@media print {
+				.singleColumnGridSectionHeader {
+					color: white;
+					background-color: blue;
+					width: 100%;
+					-webkit-print-color-adjust: exact;
+				}
+				
+				/*Force the width we want on print*/
+				.gridForm {
+					width: 100% !important;
+				}
+				
+				.mediumRisk {
+					background-color: yellow;
+					-webkit-print-color-adjust: exact;
+				}
+				  
+				.highRisk {
+					background-color: red;
+					color: white;
+					-webkit-print-color-adjust: exact;
+				}
+				
+				.printButton {
+					display: none;
+				}
+				
+				body {
+					margin: 0 auto auto auto;
+					transform: scale(0.82);
+				}
+				
+				/*hack to get it down to 1 page on print*/
+				html {
+					height: 99%;
+				}
+				
+				@page {
+					margin: -0.3in 0.5in 0.5in 0.5in;
+					size: A4;
+				}
+
+			}
+
+		</style>
+	</head>
+	<body>
+
+		<form id="fratForm" class="gridForm">
+			<span>
+				Name: <input type="text" class="fillIn" />
+
+				Date: <input type="text" id="dateField" class="fillIn" />
+			</span>
+
+			<pre></pre>
+
+			<div id="mainFratFormContent" class="gridFormContent cellLikeOutline">
+			
+			</div>
+			
+			<input type = "button" value = "Print FRAT Card" onClick = "window.print()" class="printButton"/>
+		</form>
+
+		<pre>
+		</pre>
+
+		Student Signature: &nbsp;&nbsp; __________________________________________________________
+		<pre>
+		</pre>
+
+		Instructor Signature: __________________________________________________________
+		<script>
+			let monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+			 let sections = [
+			{title:"Pilot Qualifications and Conditions", 
+				questions:[
+						{id:"student_pilot", text:"Student Pilot", points:5},
+						{id:"solo", text:"Solo", points:5},
+						{id:"", text:"Instrument Rated and Current/Proficient", points:-2},
+						{id:"", text:"Less than 50 Hours in Type or Make/Model", points:1},
+						{id:"", text:"Last Dual Instruction more than 90 Days Ago", points:3},
+						{id:"", text:"Duty Day more than 14 Hours", points:4},
+						{id:"", text:"Less than 7 Hours of Sleep Last Night", points:3},
+						{id:"", text:"Major Chronic or Acute Stress Within the Last 24 Hours", points:3},
+						{id:"", text:"Any Illness within the Last 24 Hours", points:3}
+				]
+			},
+			{title:"Operating Environment", 
+				questions:[
+						{id:"", text:"Destination is non-Towered", points:2},
+						{id:"", text:"Unfamiliar with Departure and Arrival Airports", points:1},
+						{id:"", text:"No Maintenance at Destination", points:2},
+						{id:"", text:"Planned Operations on Unimproved Surfaces", points:3},
+						{id:"", text:"Wet Runway", points:2},
+						{id:"", text:"Twilight Operations", points:2},
+						{id:"", text:"Night Operations", points:5},
+						{id:"", text:"Runway Length Less than 3000 Feet", points:3},
+						{id:"", text:"Stopping Distance Greater than 80% of Available Runway", points:5},
+						{id:"", text:"Popup Trip (Less than 4 Hour Notice)", points:2},
+						{id:"", text:"International Operations", points:2},
+						{id:"", text:"Weather Forecasted to Deteriorate within 2 Hours", points:5},
+						{id:"", text:"Destination Does not have Weather Reporting", points:3},
+						{id:"", text:"Temperature/Dewpoint Spread Within 2 Degrees", points:4},
+						{id:"", text:"Thunderstorms are Present or Forecasted Along Route", points:7},
+						{id:"", text:"Moderate to Severe Turbulence Reported by Similar or Larger Type Aircraft Along Route", points:5},
+						{id:"", text:"Less than VFR Conditions (MVFR, IFR, LIFR) Along Route", points:5},
+						{id:"", text:"Moderate to Heavy Rain at Departure or Destination Airports", points:3},
+						{id:"", text:"Freezing Level Below 5000 Feet AGL", points:3},
+						{id:"", text:"Surface Winds Greater than 20kt", points:3},
+						{id:"", text:"Crosswind Greater than 15kt", points:4},
+						{id:"", text:"Over Water Operations", points:3}
+				]
+			},
+			{title:"Equipment", 
+				questions:[
+						{id:"", text:"Aircraft is ADS-B Equipped", points:1},
+						{id:"", text:"Aircraft Has Inop or Malfunctioning Equipment", points:3},
+						{id:"", text:"Life Jackets or Raft Needed", points:3},
+						{id:"", text:"Less than 5 Hours Until Next Maintenance Due", points:2},
+						{id:"", text:"Unverified or Open Squawk on the Aircraft", points:2},
+						{id:"", text:"Engine Break-in", points:10}
+				]
+			}
+		  ];
+		  
+		  
+			//risk intervals: Low: [-inf, 21); Medium: [21 40); High: [40, inf]
+			var mediumRiskThreshold = 21;
+			var highRiskThreshold = 40;
+			var currentTotal = 0;
+
+				  
+			createForm();
+			setDate();
+
+
+			function adjustTotal(value, isClicked) {
+				let totalAmountElement = document.getElementById("totalForForm");
+				currentTotal += value*(isClicked ? 1 : -1);
+				totalAmountElement.innerHTML = currentTotal;
+
+				let totalRowElement = document.getElementById("totalRowForForm");
+				if (currentTotal >= highRiskThreshold) {
+					totalRowElement.className = getDefaultClassNameForTotalRow() + " highRisk";
+				} 
+				else if (currentTotal >= mediumRiskThreshold) 
+				{
+					totalRowElement.className = getDefaultClassNameForTotalRow() + " mediumRisk";
+				} 
+				else 
+				{
+					totalRowElement.className = getDefaultClassNameForTotalRow();
+				}
+			}
+
+			function setDate() {
+				var date = new Date();
+				document.getElementById("dateField").value = monthNames[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear();
+			}
+
+			function createForm() {
+				let formMainContentContainer = document.getElementById("mainFratFormContent");
+				sections.forEach(sectionInfo => {
+					addSection(sectionInfo, formMainContentContainer);
+				});
+				addTotalRow(formMainContentContainer);
+			}
+
+			function addSection(sectionInfo, formMainContentContainer) {
+				var sectionRowDiv = document.createElement("div");
+				sectionRowDiv.innerHTML = sectionInfo.title;
+				sectionRowDiv.className = "singleColumnGridSectionHeader cellLikeOutline";
+
+				formMainContentContainer.appendChild(sectionRowDiv);
+				sectionInfo.questions.forEach((questionInfo, index) => {
+					addQuestion(questionInfo, formMainContentContainer, index);
+				});
+			}
+
+			function addQuestion(questionInfo, formMainContentContainer, index) {
+				var question = document.createElement("label");
+				question.className = "fourColumnGridRow highlightOnHover" ;
+
+				var indexString = document.createElement("div");
+				indexString.innerHTML = index+1;
+				indexString.className = "cellLikeOutline centeredTextColumn";
+				question.appendChild(indexString);
+
+				var questionText = document.createElement("div");
+				questionText.innerHTML = questionInfo.text;
+				questionText.className = "cellLikeOutline";
+				question.appendChild(questionText);
+
+				var questionPointsString = document.createElement("div");
+				questionPointsString.innerHTML = questionInfo.points;
+				questionPointsString.className = "cellLikeOutline centeredTextColumn";
+				question.appendChild(questionPointsString);
+
+
+				var checkBoxWrapper = document.createElement("div");
+				checkBoxWrapper.className = "cellLikeOutline";
+				let checkBox = document.createElement("input");
+				checkBox.type="checkbox";
+				checkBox.addEventListener("change", (event) => {adjustTotal(questionInfo.points, event.currentTarget.checked)});
+				//need to set ID of questions
+				checkBoxWrapper.appendChild(checkBox);
+
+				question.appendChild(checkBoxWrapper);
+
+				formMainContentContainer.appendChild(question);
+			}
+			
+			function getDefaultClassNameForTotalRow() {
+				return "fourColumnGridRow";
+			}
+
+			function addTotalRow(formMainContentContainer) {
+				var totalRow = document.createElement("div");
+				totalRow.id = "totalRowForForm";
+				totalRow.className = getDefaultClassNameForTotalRow();
+
+				//blank column 1
+				totalRow.appendChild(document.createElement("div"));
+
+				var totalLabel = document.createElement("div");
+				totalLabel.innerHTML = "Total: ";
+				totalLabel.className = "rightJustifiedTextColumn";
+				totalRow.appendChild(totalLabel);
+
+				var totalPointsContainer = document.createElement("div");
+				var totalPoints = document.createElement("span");
+				totalPoints.innerHTML = currentTotal;
+				totalPoints.id = "totalForForm";
+				totalPoints.className = "centeredTextColumn";
+				totalPointsContainer.appendChild(totalPoints);
+				totalRow.appendChild(totalPointsContainer);
+
+
+				//blank column 2
+				totalRow.appendChild(document.createElement("div"));
+
+				formMainContentContainer.appendChild(totalRow);
+			}
+		  
+		</script>
+	</body>
+</html>
