@@ -109,11 +109,11 @@
 	</head>
 	<body>
 
-		<form id="fratForm" class="gridForm">
+		<form id="fratForm" class="gridForm" name="fratForm">
 			<span>
-				Name: <input type="text" class="fillIn" />
+				Name: <input type="text" class="fillIn" name="name"/>
 
-				Date: <input type="text" id="dateField" class="fillIn" />
+				Date: <input type="text" id="dateField" class="fillIn" name="date"/>
 			</span>
 
 			<pre></pre>
@@ -122,7 +122,7 @@
 			
 			</div>
 			
-			<input type = "button" value = "Print FRAT Card" onClick = "window.print()" class="printButton"/>
+			<input type= "button" value = "Print FRAT Card" onClick="submitFormToGoolgeSheetAndPrint()" class="printButton"/>
 		</form>
 
 		<pre>
@@ -138,51 +138,51 @@
 			 let sections = [
 			{title:"Pilot Qualifications and Conditions", 
 				questions:[
-						{id:"student_pilot", text:"Student Pilot", points:5},
-						{id:"solo", text:"Solo", points:5},
-						{id:"", text:"Instrument Rated and Current/Proficient", points:-2},
-						{id:"", text:"Less than 50 Hours in Type or Make/Model", points:1},
-						{id:"", text:"Last Dual Instruction more than 90 Days Ago", points:3},
-						{id:"", text:"Duty Day more than 14 Hours", points:4},
-						{id:"", text:"Less than 7 Hours of Sleep Last Night", points:3},
-						{id:"", text:"Major Chronic or Acute Stress Within the Last 24 Hours", points:3},
-						{id:"", text:"Any Illness within the Last 24 Hours", points:3}
+						{name:"studentPilot", text:"Student Pilot", points:5},
+						{name:"solo", text:"Solo", points:5},
+						{name:"instrumentRated", text:"Instrument Rated and Current/Proficient", points:-2},
+						{name:"lessThanFiftyInMakeOrModel", text:"Less than 50 Hours in Type or Make/Model", points:1},
+						{name:"lastDualInstructionMoreThanNinetyDaysAgo", text:"Last Dual Instruction more than 90 Days Ago", points:3},
+						{name:"dutyDayGreaterFourteenHours", text:"Duty Day more than 14 Hours", points:4},
+						{name:"lessThanSevenHoursOfSleep", text:"Less than 7 Hours of Sleep Last Night", points:3},
+						{name:"majorOrChronicStressWithinTwentyFourHours", text:"Major Chronic or Acute Stress Within the Last 24 Hours", points:3},
+						{name:"illnessWithinTwentyFourHours", text:"Any Illness within the Last 24 Hours", points:3}
 				]
 			},
 			{title:"Operating Environment", 
 				questions:[
-						{id:"", text:"Destination is non-Towered", points:2},
-						{id:"", text:"Unfamiliar with Departure and Arrival Airports", points:1},
-						{id:"", text:"No Maintenance at Destination", points:2},
-						{id:"", text:"Planned Operations on Unimproved Surfaces", points:3},
-						{id:"", text:"Wet Runway", points:2},
-						{id:"", text:"Twilight Operations", points:2},
-						{id:"", text:"Night Operations", points:5},
-						{id:"", text:"Runway Length Less than 3000 Feet", points:3},
-						{id:"", text:"Stopping Distance Greater than 80% of Available Runway", points:5},
-						{id:"", text:"Popup Trip (Less than 4 Hour Notice)", points:2},
-						{id:"", text:"International Operations", points:2},
-						{id:"", text:"Weather Forecasted to Deteriorate within 2 Hours", points:5},
-						{id:"", text:"Destination Does not have Weather Reporting", points:3},
-						{id:"", text:"Temperature/Dewpoint Spread Within 2 Degrees", points:4},
-						{id:"", text:"Thunderstorms are Present or Forecasted Along Route", points:7},
-						{id:"", text:"Moderate to Severe Turbulence Reported by Similar or Larger Type Aircraft Along Route", points:5},
-						{id:"", text:"Less than VFR Conditions (MVFR, IFR, LIFR) Along Route", points:5},
-						{id:"", text:"Moderate to Heavy Rain at Departure or Destination Airports", points:3},
-						{id:"", text:"Freezing Level Below 5000 Feet AGL", points:3},
-						{id:"", text:"Surface Winds Greater than 20kt", points:3},
-						{id:"", text:"Crosswind Greater than 15kt", points:4},
-						{id:"", text:"Over Water Operations", points:3}
+						{name:"nonToweredDestination", text:"Destination is non-Towered", points:2},
+						{name:"unfamiliarDepartureOrArrivalAirport", text:"Unfamiliar with Departure and Arrival Airports", points:1},
+						{name:"noMaintAtDest", text:"No Maintenance at Destination", points:2},
+						{name:"plannedOperOnUnimprovedSurfaces", text:"Planned Operations on Unimproved Surfaces", points:3},
+						{name:"wetRunway", text:"Wet Runway", points:2},
+						{name:"twilightOps", text:"Twilight Operations", points:2},
+						{name:"nightOps", text:"Night Operations", points:5},
+						{name:"runwayLessThanThreeKFeet", text:"Runway Length Less than 3000 Feet", points:3},
+						{name:"stoppingDistGreaterThanEightyPercOfRunway", text:"Stopping Distance Greater than 80% of Available Runway", points:5},
+						{name:"popupTripLessThanFourHoursNotice", text:"Popup Trip (Less than 4 Hour Notice)", points:2},
+						{name:"intlOps", text:"International Operations", points:2},
+						{name:"weatherForecastedDeteriorateWithinTwoHours", text:"Weather Forecasted to Deteriorate within 2 Hours", points:5},
+						{name:"noDestinationWeatherReporting", text:"Destination Does not have Weather Reporting", points:3},
+						{name:"tempDewpointSpreadWithinTwoDegrees", text:"Temperature/Dewpoint Spread Within 2 Degrees", points:4},
+						{name:"thunderstormsPresentOrForecastedAlongRoute", text:"Thunderstorms are Present or Forecasted Along Route", points:7},
+						{name:"modOrSevTurbulanceReportedBySimilarOrLargerAircraftOnRoute", text:"Moderate to Severe Turbulence Reported by Similar or Larger Type Aircraft Along Route", points:5},
+						{name:"lessThanVfrConditionsAlongRoute", text:"Less than VFR Conditions (MVFR, IFR, LIFR) Along Route", points:5},
+						{name:"modToHeavyRainAtDepartureOrDestinationAirport", text:"Moderate to Heavy Rain at Departure or Destination Airports", points:3},
+						{name:"freezingLevelBelowFiveKAgl", text:"Freezing Level Below 5000 Feet AGL", points:3},
+						{name:"windsGreaterThanTwentyKnots", text:"Surface Winds Greater than 20kt", points:3},
+						{name:"crossWindGreaterThanFifteenKnots", text:"Crosswind Greater than 15kt", points:4},
+						{name:"overWaterOperations", text:"Over Water Operations", points:3}
 				]
 			},
 			{title:"Equipment", 
 				questions:[
-						{id:"", text:"Aircraft is ADS-B Equipped", points:1},
-						{id:"", text:"Aircraft Has Inop or Malfunctioning Equipment", points:3},
-						{id:"", text:"Life Jackets or Raft Needed", points:3},
-						{id:"", text:"Less than 5 Hours Until Next Maintenance Due", points:2},
-						{id:"", text:"Unverified or Open Squawk on the Aircraft", points:2},
-						{id:"", text:"Engine Break-in", points:10}
+						{name:"aircraftHasAdsB", text:"Aircraft is ADS-B Equipped", points:1},
+						{name:"aircraftHasMalfOrInopEquipment", text:"Aircraft Has Inop or Malfunctioning Equipment", points:3},
+						{name:"lifeJacketsOrRaftRequired", text:"Life Jackets or Raft Needed", points:3},
+						{name:"lessThanFiveHoursUntilMaintenance", text:"Less than 5 Hours Until Next Maintenance Due", points:2},
+						{name:"unverifiedOrOpenSquawk", text:"Unverified or Open Squawk on the Aircraft", points:2},
+						{name:"enginBreakIn", text:"Engine Break-in", points:10}
 				]
 			}
 		  ];
@@ -192,7 +192,7 @@
 			var mediumRiskThreshold = 21;
 			var highRiskThreshold = 40;
 			var currentTotal = 0;
-
+			var apiToSubmitFormTo = "https://script.google.com/macros/s/AKfycbzdEYYLEwORp6QFqR0o4fyF60HJM4ija2AlL0GzPO3j5-Zn67si8mR7-A/exec";
 				  
 			createForm();
 			setDate();
@@ -265,6 +265,8 @@
 				checkBoxWrapper.className = "cellLikeOutline";
 				let checkBox = document.createElement("input");
 				checkBox.type="checkbox";
+				checkBox.name=questionInfo.name;
+				checkBox.form="fratForm";
 				checkBox.addEventListener("change", (event) => {adjustTotal(questionInfo.points, event.currentTarget.checked)});
 				//need to set ID of questions
 				checkBoxWrapper.appendChild(checkBox);
@@ -304,6 +306,13 @@
 				totalRow.appendChild(document.createElement("div"));
 
 				formMainContentContainer.appendChild(totalRow);
+			}
+			
+			function submitFormToGoolgeSheetAndPrint() {	
+				fetch(apiToSubmitFormTo, {method: "POST", body: new FormData(document.forms["fratForm"])})
+						  .then(respProm => console.log("Form submitted. ", respProm))
+						  .catch(err => console.error("Error submitting form. ", err.message));
+				window.print();
 			}
 		  
 		</script>
