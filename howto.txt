@@ -1,0 +1,70 @@
+This document's steps and content are sumarrized/updated from https://github.com/jamiewilson/form-to-google-sheets. The license for the original repo is Apache 2.0 and can be found within the docs folder. All rights are reserved by their respective owners within this repo (though feel free to follow the steps!).
+
+
+Please note, you do have some restrictions imposed on you by Google in terms of the number of submissions you're allowed/resources you can use: https://developers.google.com/apps-script/guides/services/quotas
+
+#1. Name a desired individual sheet/page as you like. The name of the sheet/page will be referenced below as "<sheet/page name>".
+#2. Go to Tools > Script Editor. We will be working in this editor for a number of steps, only returning to the Google Sheet in the final step.
+	#2.1 Add the following code, replacing <sheet/page name> (originally from https://github.com/jamiewilson/form-to-google-sheets on Feb 22, 2021, under Apache 2.0 license. This can be found in the docs folder and applies to the code snippet below only.)
+
+var sheetName = '<sheet/page name>'
+var scriptProp = PropertiesService.getScriptProperties()
+
+function intialSetup () {
+  var activeSpreadsheet = SpreadsheetApp.getActiveSpreadsheet()
+  scriptProp.setProperty('key', activeSpreadsheet.getId())
+}
+
+function doPost (e) {
+  var lock = LockService.getScriptLock()
+  lock.tryLock(10000)
+
+  try {
+    var doc = SpreadsheetApp.openById(scriptProp.getProperty('key'))
+    var sheet = doc.getSheetByName(sheetName)
+
+    var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0]
+    var nextRow = sheet.getLastRow() + 1
+
+    var newRow = headers.map(function(header) {
+      return header === 'timestamp' ? new Date() : e.parameter[header]
+    })
+
+    sheet.getRange(nextRow, 1, 1, newRow.length).setValues([newRow])
+
+    return ContentService
+      .createTextOutput(JSON.stringify({ 'result': 'success', 'row': nextRow }))
+      .setMimeType(ContentService.MimeType.JSON)
+  }
+
+  catch (e) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ 'result': 'error', 'error': e }))
+      .setMimeType(ContentService.MimeType.JSON)
+  }
+
+  finally {
+    lock.releaseLock()
+  }
+}
+
+
+#3 Change the script name to your preference, like "Submit Webform".
+#4 Rename the project. (It's probably "Untitled Project" to begin with.)
+#5 Select "initialSetup" as the function to run, run it.
+	#5.1 You'll get a prompt asking you to review permissions, proceed.
+	#5.2 You'll be asked to use a Google Account to sign in, choose your preferred one.
+	#5.3 You'll be warned that tha app isn't verified. Check the script above to your heart's content to ensure it's not doing anything nefarious. Then go to "Advanced" and proceed.
+	#5.4 Allow editing, viewing, changing, etc. of your spreadsheets.
+#6 Select triggers in the sidebar, add a new trigger. 
+	#6.1 Select doPost, Head, from spreadsheet, and On form submit. Choose your preferred failure notification settings. 
+	#6.2 Save the trigger to the account you used to approve the app initially.
+	#6.2 Again, allow the permissions so long as you are comfortable.
+#7 Click "Deploy" as a new deployment. Select Web app as the type.
+	#7.1 Name it what you want.
+	#7.2 Select "Me(<your email>)" as the Execute as option.
+	#7.3 Select "Anyone" as the Who has access option.
+	#7.4 Click "Deploy".
+#8 Copy your web app URL.
+
+
